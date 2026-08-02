@@ -46,7 +46,7 @@ async function me(stateOtp, formData) {
     };
   }
 
-  const data = await PostFetch("/auth/me",{});
+  const data = await PostFetch("/auth/me", {});
 
   if (data.status === "success") {
     return {
@@ -58,4 +58,25 @@ async function me(stateOtp, formData) {
     };
   }
 }
-export { login, me };
+async function logout(state, formData) {
+  const cookieStore = await cookies();
+
+
+  const data = await PostFetch(
+    "/auth/logout",
+    {},
+   
+  );
+
+  if (data.status === "success") {
+    cookieStore.delete("access_token");
+    return {
+      success: "you are logged out",
+    };
+  } else {
+    return {
+      error: "user forbbiden",
+    };
+  }
+}
+export { login, me, logout };

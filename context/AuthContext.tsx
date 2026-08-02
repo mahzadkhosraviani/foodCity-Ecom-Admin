@@ -16,8 +16,11 @@ export const AuthProvider = ({ children }) => {
     };
     checkUserLoggedIN();
   }, []);
+  const logoutContext = () => {
+    setUser(null);
+  };
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user,logoutContext }}>{children}</AuthContext.Provider>
   );
 };
 export default AuthContext;
