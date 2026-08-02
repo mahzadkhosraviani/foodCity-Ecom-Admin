@@ -1,6 +1,7 @@
 "use client";
 import { login } from "@/actions/auth";
 import SubmitButton from "@/components/SubmitButton";
+import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { toast } from "react-toastify";
 
@@ -9,9 +10,13 @@ export default function LoginPage() {
     status: null,
     message: null,
   });
+  const router = useRouter();
   useEffect(() => {
     if (!state.message) return;
     toast(state.message, { type: `${state.status}` });
+    if (state.status === "success") {
+      router.push("/");
+    }
   }, [state]);
   return (
     <>
