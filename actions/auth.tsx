@@ -1,6 +1,6 @@
 "use server";
 
-import { PostFetchUnAuth } from "@/utils/fetch";
+import { PostFetch, PostFetchUnAuth } from "@/utils/fetch";
 import { handleError } from "@/utils/helper";
 import { cookies } from "next/headers";
 
@@ -36,4 +36,26 @@ async function login(state, formData) {
     };
   }
 }
-export { login };
+async function me(stateOtp, formData) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("access_token");
+
+  if (!token) {
+    return {
+      error: "not Authorized",
+    };
+  }
+
+  const data = await PostFetch("/auth/me",{});
+
+  if (data.status === "success") {
+    return {
+      user: data.data,
+    };
+  } else {
+    return {
+      error: "user forbbiden",
+    };
+  }
+}
+export { login, me };
