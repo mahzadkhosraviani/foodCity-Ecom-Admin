@@ -2,8 +2,9 @@ import { GetFetch } from "@/utils/fetch";
 import Link from "next/link";
 import Paginate from "../Paginate";
 
-export default async function Table({ params }) {
+export default async function Table({params}) {
   const data = await GetFetch(`/users?${params}`);
+
   return (
     <>
       {" "}

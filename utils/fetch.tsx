@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 const GetFetch = async (url) => {
   const cookieStore = await cookies();
   const token = cookieStore.get("access_token");
+
   const res = await fetch(`${process.env.API_URL}${url}`, {
     cache: "no-store",
     headers: {
@@ -11,6 +12,7 @@ const GetFetch = async (url) => {
       Authorization: `Bearer ${token?.value}`,
     },
   });
+
   if (res.ok) {
     const data = await res.json();
 
@@ -26,7 +28,7 @@ const PostFetch = async (url, body) => {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: `Bearer ${token.value}`,
+      Authorization: `Bearer ${token?.value}`,
     },
     body: JSON.stringify(body),
   });
@@ -44,4 +46,18 @@ const PostFetchUnAuth = async (url, body) => {
   });
   return await res.json();
 };
-export { GetFetch, PostFetch, PostFetchUnAuth };
+const deleteFetch = async (url) => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("access_token");
+  const res = await fetch(`${process.env.API_URL}${url}`, {
+    method: "DELETE",
+    cache: "no-store",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${token?.value}`,
+    },
+  });
+  return await res.json();
+};
+export { GetFetch, PostFetch, PostFetchUnAuth, deleteFetch };

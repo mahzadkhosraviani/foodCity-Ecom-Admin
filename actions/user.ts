@@ -1,8 +1,9 @@
 "use server";
 
-import { PostFetch } from "@/utils/fetch";
+import { deleteFetch, PostFetch } from "@/utils/fetch";
 import { handleError } from "@/utils/helper";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 async function createUser(state, formData) {
   const name = formData.get("name");
@@ -37,7 +38,7 @@ async function createUser(state, formData) {
   }
   const data = await PostFetch("/users", { name, email, cellphone, password });
   if (data.status === "success") {
-    revalidatePath("/users")
+    revalidatePath("/users");
     return {
       status: data.status,
       message: "کاربر مورد نظر ایجاد شد.",
@@ -50,4 +51,24 @@ async function createUser(state, formData) {
     };
   }
 }
-export { createUser };
+async function deleteUser(state, formData) {
+  const id = formData.get("id");
+  if (id === "" || id === null) {
+    return {
+      status: "error",
+      message: "شناسه کاربر الزامی است.",
+    };
+  }
+  const data = await deleteFetch(`/users/${id}`);
+  if (data.status === "success") {
+    revalidatePath("/users");
+    redirect("/users");
+  } else {
+    return {
+      status: data.status,
+      message: handleError(data.message),
+    };
+  }
+}
+
+export { createUser, deleteUser };
