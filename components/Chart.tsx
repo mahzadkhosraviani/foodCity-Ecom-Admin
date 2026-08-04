@@ -8,7 +8,7 @@ import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 
 export default function Chart({ dataChart }) {
   useEffect(() => {
-    console.log(dataChart);
+   
     let root = am5.Root.new("chartdiv");
 
     // Set themes
