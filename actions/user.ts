@@ -1,6 +1,6 @@
 "use server";
 
-import { deleteFetch, PostFetch } from "@/utils/fetch";
+import { deleteFetch, PostFetch, PutFetch } from "@/utils/fetch";
 import { handleError } from "@/utils/helper";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -51,6 +51,53 @@ async function createUser(state, formData) {
     };
   }
 }
+async function editUser(state, formData) {
+  const id = formData.get("id");
+  const name = formData.get("name");
+  const email = formData.get("email");
+  const cellphone = formData.get("cellphone");
+  const password = formData.get("password");
+  if (id === "" || id === null) {
+    return {
+      status: "error",
+      message: "شناسه کاربر الزامی است.",
+    };
+  }
+  if (name === "") {
+    return {
+      status: "error",
+      message: "فیلد نام الزامی است.",
+    };
+  }
+  if (email === "") {
+    return {
+      status: "error",
+      message: "فیلد ایمیل الزامی است.",
+    };
+  }
+  const cellphonePattern = /^(\+98|0)?9\d{9}$/i;
+  if (cellphone == "" || !cellphonePattern.test(cellphone)) {
+    return {
+      status: "error",
+      message: "فیلد شماره تماس کاربر نامعتبر است.",
+    };
+  }
+
+  const data = await PutFetch(`/users/${id}`, { name, email, cellphone, password });
+  if (data.status === "success") {
+    revalidatePath("/users");
+    return {
+      status: data.status,
+      message: "کاربر مورد نظر ایجاد شد.",
+      user: data.data.user,
+    };
+  } else {
+    return {
+      status: data.status,
+      message: handleError(data.message),
+    };
+  }
+}
 async function deleteUser(state, formData) {
   const id = formData.get("id");
   if (id === "" || id === null) {
@@ -71,4 +118,4 @@ async function deleteUser(state, formData) {
   }
 }
 
-export { createUser, deleteUser };
+export { createUser, deleteUser, editUser };

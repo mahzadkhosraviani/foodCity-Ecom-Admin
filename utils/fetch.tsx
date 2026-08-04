@@ -34,6 +34,21 @@ const PostFetch = async (url, body) => {
   });
   return await res.json();
 };
+const PutFetch = async (url, body) => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("access_token");
+  const res = await fetch(`${process.env.API_URL}${url}`, {
+    method: "PUT",
+    cache: "no-store",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${token?.value}`,
+    },
+    body: JSON.stringify(body),
+  });
+  return await res.json();
+};
 const PostFetchUnAuth = async (url, body) => {
   const res = await fetch(`${process.env.API_URL}${url}`, {
     method: "POST",
@@ -60,4 +75,4 @@ const deleteFetch = async (url) => {
   });
   return await res.json();
 };
-export { GetFetch, PostFetch, PostFetchUnAuth, deleteFetch };
+export { GetFetch, PostFetch, PostFetchUnAuth, deleteFetch,PutFetch };
