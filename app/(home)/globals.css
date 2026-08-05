@@ -143,3 +143,6 @@ body {
   font-family: "vazir", sans-serif !important;
   direction: rtl;
 }
+.rmdp-container {
+  width: 100%;
+}
