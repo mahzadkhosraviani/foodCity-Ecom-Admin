@@ -29,13 +29,13 @@ export default async function Table({params}) {
                 <td>
                   <div className="d-flex">
                     <Link
-                      href={`users/${user.id}`}
+                      href={`/users/${user.id}`}
                       className="btn btn-sm btn-outline-dark me-2"
                     >
                       نمایش
                     </Link>
                     <Link
-                      href={`users/edit/${user.id}`}
+                      href={`/users/edit/${user.id}`}
                       className="btn btn-sm btn-dark"
                     >
                       ویرایش
