@@ -28,7 +28,7 @@ export default function CreateProduct({ categories }) {
     if (!state.message) return;
     toast(state.message, { type: `${state.status}` });
     if (state.status === "success") {
-      router.push("/users");
+      router.push("/products");
     }
   }, [state]);
   function setPrimaryImage(e) {
@@ -79,7 +79,7 @@ export default function CreateProduct({ categories }) {
               <input
                 onChange={setPrimaryImage}
                 ref={primaryImageRef}
-                name="primary-image"
+                name="primary_image"
                 type="file"
                 className={image === null ? "form-control" : "d-none"}
               />
@@ -159,7 +159,10 @@ export default function CreateProduct({ categories }) {
         </div>
 
         <div>
-          <SubmitButton title="ایجاد محصول" style="btn btn-outline-dark mt-3 mb-3" />
+          <SubmitButton
+            title="ایجاد محصول"
+            style="btn btn-outline-dark mt-3 mb-3"
+          />
         </div>
       </form>
     </>

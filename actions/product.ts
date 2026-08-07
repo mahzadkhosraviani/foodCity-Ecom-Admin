@@ -1,48 +1,65 @@
 "use server";
 
-import {  PostFetch } from "@/utils/fetch";
+import { PostFetch } from "@/utils/fetch";
 import { handleError } from "@/utils/helper";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 async function createProduct(state, formData) {
+  const primary_image = formData.get("primary_image");
   const name = formData.get("name");
-  const email = formData.get("email");
-  const cellphone = formData.get("cellphone");
-  const password = formData.get("password");
-
+  const category_id = formData.get("category_id");
+  const price = formData.get("price");
+  const quantity = formData.get("quantity");
+  if (primary_image.size == 0) {
+    return {
+      status: "error",
+      message: "ارسال تصویر الزامی است.",
+    };
+  }
   if (name === "") {
     return {
       status: "error",
       message: "فیلد نام الزامی است.",
     };
   }
-  if (email === "") {
+  if (category_id === null) {
     return {
       status: "error",
-      message: "فیلد ایمیل الزامی است.",
+      message: "فیلد دسته بندی الزامی است.",
     };
   }
-  const cellphonePattern = /^(\+98|0)?9\d{9}$/i;
-  if (cellphone == "" || !cellphonePattern.test(cellphone)) {
+  if (price === "") {
     return {
       status: "error",
-      message: "فیلد شماره تماس کاربر نامعتبر است.",
+      message: "فیلد قیمت الزامی است.",
     };
   }
-  if (password === "") {
+
+  if (quantity === "") {
     return {
       status: "error",
-      message: "فیلد رمز عبور الزامی است.",
+      message: "فیلد تعداد الزامی است.",
     };
   }
-  const data = await PostFetch("/users", { name, email, cellphone, password });
+  const cookieStore = await cookies();
+  const token = cookieStore.get("access_token");
+  const res = await fetch(`${process.env.API_URL}/products`, {
+    method: "POST",
+    cache: "no-store",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token?.value}`,
+    },
+    body: formData,
+  });
+  const data = await res.json();
   if (data.status === "success") {
-    revalidatePath("/users");
+    revalidatePath("/products");
     return {
       status: data.status,
-      message: "کاربر مورد نظر ایجاد شد.",
-      user: data.data.user,
+      message: "محصول مورد نظر ایجاد شد.",
     };
   } else {
     return {
