@@ -114,6 +114,7 @@ export default function EditProduct({ product, categories }) {
               </div>
               <div className={image === null ? "" : "d-none"}>
                 <Image
+                  unoptimized
                   className="rounded mb-4"
                   src={product.primary_image}
                   width={350}
