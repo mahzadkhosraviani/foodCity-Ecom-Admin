@@ -1,5 +1,5 @@
 "use client";
-import { createProduct } from "@/actions/product";
+import { createProduct, editProduct } from "@/actions/product";
 import DatePicker from "react-multi-date-picker";
 import SubmitButton from "@/components/SubmitButton";
 import persian from "react-date-object/calendars/persian";
@@ -43,7 +43,7 @@ export default function EditProduct({ product, categories }) {
   });
   const [image, setImage] = useState(null);
   const primaryImageRef = useRef();
-  const [state, formAction] = useActionState(createProduct, {
+  const [state, formAction] = useActionState(editProduct, {
     status: null,
     message: null,
   });
@@ -237,10 +237,11 @@ export default function EditProduct({ product, categories }) {
             className="form-control"
           ></textarea>
         </div>
-
+        <input name="id" type="hidden" defaultValue={product.id} />
+        <input name="_method" defaultValue="PUT" type="hidden" />
         <div>
           <SubmitButton
-            title="ایجاد محصول"
+            title="ویرایش محصول"
             style="btn btn-outline-dark mt-3 mb-3"
           />
         </div>
