@@ -4,9 +4,10 @@ import { useRouter } from "next/router";
 import { useActionState, useEffect } from "react";
 import { toast } from "react-toastify";
 import SubmitButton from "../SubmitButton";
+import { deleteProduct } from "@/actions/product";
 
 export default function DeleteProduct({ id }) {
-  const [state, formAction] = useActionState(deleteUser, {
+  const [state, formAction] = useActionState(deleteProduct, {
     status: null,
     message: null,
   });
