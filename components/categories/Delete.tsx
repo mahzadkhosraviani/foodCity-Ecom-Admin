@@ -3,10 +3,10 @@
 import { useActionState, useEffect } from "react";
 
 import SubmitButton from "../SubmitButton";
-import { deleteProduct } from "@/actions/product";
+import { deleteCategory } from "@/actions/categories";
 
-export default function DeleteProduct({ id }) {
-  const [state, formAction] = useActionState(deleteProduct, {
+export default function DeleteCategory({ id }) {
+  const [state, formAction] = useActionState(deleteCategory, {
     status: null,
     message: null,
   });

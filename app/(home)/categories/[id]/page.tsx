@@ -1,4 +1,5 @@
-import DeleteUser from "@/components/users/Delete";
+import DeleteCategory from "@/components/categories/Delete";
+
 import { GetFetch } from "@/utils/fetch";
 
 export default async function CategoryPage({ params }) {
@@ -29,8 +30,9 @@ export default async function CategoryPage({ params }) {
             placeholder={category.description}
           />
         </div>
+
+        <DeleteCategory id={category.id} />
       </div>
-      <DeleteUser id={category.id} />
     </>
   );
 }

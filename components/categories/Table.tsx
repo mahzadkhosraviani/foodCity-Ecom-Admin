@@ -1,8 +1,6 @@
 import { GetFetch } from "@/utils/fetch";
 import Link from "next/link";
 import Paginate from "../Paginate";
-import { numberFormat } from "@/utils/helper";
-import Image from "next/image";
 
 export default async function Table({ params }) {
   const data = await GetFetch(`/categories?${params}`);
