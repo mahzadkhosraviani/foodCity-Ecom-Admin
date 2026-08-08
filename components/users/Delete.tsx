@@ -1,8 +1,8 @@
 "use client";
 import { deleteUser } from "@/actions/user";
-import { useRouter } from "next/router";
-import { useActionState, useEffect } from "react";
-import { toast } from "react-toastify";
+
+import { useActionState } from "react";
+
 import SubmitButton from "../SubmitButton";
 
 export default function DeleteUser({ id }) {

@@ -83,12 +83,17 @@ async function editUser(state, formData) {
     };
   }
 
-  const data = await PutFetch(`/users/${id}`, { name, email, cellphone, password });
+  const data = await PutFetch(`/users/${id}`, {
+    name,
+    email,
+    cellphone,
+    password,
+  });
   if (data.status === "success") {
     revalidatePath("/users");
     return {
       status: data.status,
-      message: "کاربر مورد نظر ایجاد شد.",
+      message: "کاربر مورد نظر ویرایش شد.",
       user: data.data.user,
     };
   } else {
