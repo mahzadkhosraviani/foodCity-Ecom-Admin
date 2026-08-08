@@ -1,10 +1,13 @@
 import Loading from "@/components/Loading";
 import Table from "@/components/orders/Table";
 
-
 import { Suspense } from "react";
 
-export default async function OrdersPage({ searchParams }) {
+export default async function OrdersPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
   const paramsObj = await searchParams;
   const params = new URLSearchParams(paramsObj);
   return (

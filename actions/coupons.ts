@@ -4,8 +4,11 @@ import { deleteFetch, PostFetch, PutFetch } from "@/utils/fetch";
 import { handleError } from "@/utils/helper";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-
-async function createCoupon(state, formData) {
+type ActionState = {
+  status: string | null;
+  message: string | null;
+};
+async function createCoupon(state: ActionState, formData: FormData) {
   const code = formData.get("code");
   const percentage = formData.get("percentage");
   const expired_at = formData.get("expired_at");
@@ -44,7 +47,7 @@ async function createCoupon(state, formData) {
     };
   }
 }
-async function editCoupon(state, formData) {
+async function editCoupon(state: ActionState, formData: FormData) {
   const id = formData.get("id");
   const code = formData.get("code");
   const percentage = formData.get("percentage");
@@ -88,7 +91,7 @@ async function editCoupon(state, formData) {
     };
   }
 }
-async function deleteCoupon(state, formData) {
+async function deleteCoupon(state: ActionState, formData: FormData) {
   const id = formData.get("id");
   if (id === "" || id === null) {
     return {

@@ -3,7 +3,11 @@ import Table from "@/components/transactions/Table";
 
 import { Suspense } from "react";
 
-export default async function TransactionsPage({ searchParams }) {
+export default async function TransactionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
   const paramsObj = await searchParams;
   const params = new URLSearchParams(paramsObj);
   return (
