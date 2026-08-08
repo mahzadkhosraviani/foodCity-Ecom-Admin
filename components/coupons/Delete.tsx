@@ -1,12 +1,12 @@
 "use client";
-import { deleteUser } from "@/actions/user";
 
 import { useActionState } from "react";
 
 import SubmitButton from "../SubmitButton";
+import { deleteCoupon } from "@/actions/coupons";
 
 export default function DeleteCoupon({ id }) {
-  const [state, formAction] = useActionState(deleteUser, {
+  const [state, formAction] = useActionState(deleteCoupon, {
     status: null,
     message: null,
   });
