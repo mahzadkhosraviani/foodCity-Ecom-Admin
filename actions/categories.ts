@@ -5,11 +5,9 @@ import { handleError } from "@/utils/helper";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-async function createUser(state, formData) {
+async function createCategory(state, formData) {
   const name = formData.get("name");
-  const email = formData.get("email");
-  const cellphone = formData.get("cellphone");
-  const password = formData.get("password");
+  const description = formData.get("description");
 
   if (name === "") {
     return {
@@ -17,31 +15,19 @@ async function createUser(state, formData) {
       message: "فیلد نام الزامی است.",
     };
   }
-  if (email === "") {
+  if (description === "") {
     return {
       status: "error",
-      message: "فیلد ایمیل الزامی است.",
+      message: "فیلد توضیحات الزامی است.",
     };
   }
-  const cellphonePattern = /^(\+98|0)?9\d{9}$/i;
-  if (cellphone == "" || !cellphonePattern.test(cellphone)) {
-    return {
-      status: "error",
-      message: "فیلد شماره تماس کاربر نامعتبر است.",
-    };
-  }
-  if (password === "") {
-    return {
-      status: "error",
-      message: "فیلد رمز عبور الزامی است.",
-    };
-  }
-  const data = await PostFetch("/users", { name, email, cellphone, password });
+
+  const data = await PostFetch("/categories", { name, description });
   if (data.status === "success") {
-    revalidatePath("/users");
+    revalidatePath("/categories");
     return {
       status: data.status,
-      message: "کاربر مورد نظر ایجاد شد.",
+      message: "دسته بندی مورد نظر ایجاد شد.",
       user: data.data.user,
     };
   } else {
@@ -51,7 +37,7 @@ async function createUser(state, formData) {
     };
   }
 }
-async function editUser(state, formData) {
+async function editCategory(state, formData) {
   const id = formData.get("id");
   const name = formData.get("name");
   const email = formData.get("email");
@@ -123,4 +109,4 @@ async function deleteCategory(state, formData) {
   }
 }
 
-export { createUser, deleteCategory, editUser };
+export { createCategory, deleteCategory, editCategory };
