@@ -2,7 +2,6 @@
 
 A modern and responsive **Admin Panel** for the Food E-Commerce platform built with **Next.js** and **TypeScript**.
 
-🚧 This project is currently under active development.
 
 ## Features
 
