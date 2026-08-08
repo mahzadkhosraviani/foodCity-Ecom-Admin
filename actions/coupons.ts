@@ -46,47 +46,39 @@ async function createCoupon(state, formData) {
 }
 async function editCoupon(state, formData) {
   const id = formData.get("id");
-  const name = formData.get("name");
-  const email = formData.get("email");
-  const cellphone = formData.get("cellphone");
-  const password = formData.get("password");
+  const code = formData.get("code");
+  const percentage = formData.get("percentage");
+  const expired_at = formData.get("expired_at");
+
   if (id === "" || id === null) {
     return {
       status: "error",
-      message: "شناسه کاربر الزامی است.",
+      message: "شناسه کد تخفیف الزامی است.",
     };
   }
-  if (name === "") {
+  if (code === "") {
     return {
       status: "error",
-      message: "فیلد نام الزامی است.",
+      message: "فیلد کد تخفیف الزامی است.",
     };
   }
-  if (email === "") {
+  if (percentage === "") {
     return {
       status: "error",
-      message: "فیلد ایمیل الزامی است.",
-    };
-  }
-  const cellphonePattern = /^(\+98|0)?9\d{9}$/i;
-  if (cellphone == "" || !cellphonePattern.test(cellphone)) {
-    return {
-      status: "error",
-      message: "فیلد شماره تماس کاربر نامعتبر است.",
+      message: "فیلد درصد الزامی است.",
     };
   }
 
-  const data = await PutFetch(`/users/${id}`, {
-    name,
-    email,
-    cellphone,
-    password,
+  const data = await PutFetch(`/coupons/${id}`, {
+    code,
+    percentage,
+    expired_at,
   });
   if (data.status === "success") {
-    revalidatePath("/users");
+    revalidatePath("/coupons");
     return {
       status: data.status,
-      message: "کاربر مورد نظر ویرایش شد.",
+      message: "کد تخفیف مورد نظر ویرایش شد.",
       user: data.data.user,
     };
   } else {
