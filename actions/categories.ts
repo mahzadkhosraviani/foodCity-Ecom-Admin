@@ -4,8 +4,11 @@ import { deleteFetch, PostFetch, PutFetch } from "@/utils/fetch";
 import { handleError } from "@/utils/helper";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-
-async function createCategory(state, formData) {
+type ActionState = {
+  status: string | null;
+  message: string | null;
+};
+async function createCategory(state: ActionState, formData: FormData) {
   const name = formData.get("name");
   const description = formData.get("description");
 
@@ -37,7 +40,7 @@ async function createCategory(state, formData) {
     };
   }
 }
-async function editCategory(state, formData) {
+async function editCategory(state: ActionState, formData: FormData) {
   const id = formData.get("id");
   const name = formData.get("name");
   const description = formData.get("description");
@@ -79,7 +82,7 @@ async function editCategory(state, formData) {
     };
   }
 }
-async function deleteCategory(state, formData) {
+async function deleteCategory(state: ActionState, formData: FormData) {
   const id = formData.get("id");
   if (id === "" || id === null) {
     return {

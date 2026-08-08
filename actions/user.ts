@@ -4,8 +4,12 @@ import { deleteFetch, PostFetch, PutFetch } from "@/utils/fetch";
 import { handleError } from "@/utils/helper";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-
-async function createUser(state, formData) {
+type ActionState = {
+  status: string | null;
+  message: string | null;
+  user?: any;
+};
+async function createUser(state: ActionState, formData: FormData) {
   const name = formData.get("name");
   const email = formData.get("email");
   const cellphone = formData.get("cellphone");
@@ -51,7 +55,7 @@ async function createUser(state, formData) {
     };
   }
 }
-async function editUser(state, formData) {
+async function editUser(state: ActionState, formData: FormData) {
   const id = formData.get("id");
   const name = formData.get("name");
   const email = formData.get("email");
@@ -103,7 +107,7 @@ async function editUser(state, formData) {
     };
   }
 }
-async function deleteUser(state, formData) {
+async function deleteUser(state: ActionState, formData: FormData) {
   const id = formData.get("id");
   if (id === "" || id === null) {
     return {

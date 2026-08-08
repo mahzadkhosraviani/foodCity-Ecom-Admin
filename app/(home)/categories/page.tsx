@@ -4,7 +4,11 @@ import Loading from "@/components/Loading";
 import Link from "next/link";
 import { Suspense } from "react";
 
-export default async function CategoriesPage({ searchParams }) {
+export default async function CategoriesPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
   const paramsObj = await searchParams;
   const params = new URLSearchParams(paramsObj);
   return (

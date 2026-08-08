@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState } from "react";
 
 import SubmitButton from "../SubmitButton";
 import { deleteCategory } from "@/actions/categories";

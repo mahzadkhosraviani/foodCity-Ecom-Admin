@@ -5,8 +5,11 @@ import { handleError } from "@/utils/helper";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-
-async function createProduct(state, formData) {
+type ActionState = {
+  status: string | null;
+  message: string | null;
+};
+async function createProduct(state: ActionState, formData: FormData) {
   const primary_image = formData.get("primary_image");
   const name = formData.get("name");
   const category_id = formData.get("category_id");
@@ -68,7 +71,7 @@ async function createProduct(state, formData) {
     };
   }
 }
-async function editProduct(state, formData) {
+async function editProduct(state: ActionState, formData: FormData) {
   const id = formData.get("id");
   const primary_image = formData.get("primary_image");
   const images = formData.get("images[]");
@@ -138,7 +141,7 @@ async function editProduct(state, formData) {
     };
   }
 }
-async function deleteProduct(state, formData) {
+async function deleteProduct(state: ActionState, formData: FormData) {
   const id = formData.get("id");
   if (id === "" || id === null) {
     return {

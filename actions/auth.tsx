@@ -3,8 +3,11 @@
 import { PostFetch, PostFetchUnAuth } from "@/utils/fetch";
 import { handleError } from "@/utils/helper";
 import { cookies } from "next/headers";
-
-async function login(state, formData) {
+type ActionState = {
+  status: string | null;
+  message: string | null;
+};
+async function login(state:ActionState, formData:FormData) {
   const cookieStore = await cookies();
   const email = formData.get("email");
   const password = formData.get("password");
@@ -36,7 +39,7 @@ async function login(state, formData) {
     };
   }
 }
-async function me(stateOtp, formData) {
+async function me(stateOtp:ActionState, formData:FormData) {
   const cookieStore = await cookies();
   const token = cookieStore.get("access_token");
 
@@ -58,7 +61,7 @@ async function me(stateOtp, formData) {
     };
   }
 }
-async function logout(state, formData) {
+async function logout(state:ActionState, formData:FormData) {
   const cookieStore = await cookies();
 
 

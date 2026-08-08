@@ -3,7 +3,11 @@ import Table from "@/components/products/Table";
 import Link from "next/link";
 import { Suspense } from "react";
 
-export default async function ProductsPage({ searchParams }) {
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
   const paramsObj = await searchParams;
   const params = new URLSearchParams(paramsObj);
   return (
