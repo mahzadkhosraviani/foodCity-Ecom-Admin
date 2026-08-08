@@ -1,0 +1,252 @@
+"use client";
+import { createProduct, editProduct } from "@/actions/product";
+import DatePicker from "react-multi-date-picker";
+import SubmitButton from "@/components/SubmitButton";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+import gregorian from "react-date-object/calendars/gregorian";
+import gregorian_en from "react-date-object/locales/gregorian_en";
+
+import Image from "next/image";
+
+import { useRouter } from "next/navigation";
+import { useActionState, useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
+import TimePicker from "react-multi-date-picker/plugins/time_picker";
+import DatePanel from "react-multi-date-picker/plugins/date_panel";
+
+export default function EditProduct({ product, categories }) {
+  const [dateOnSale, setDateOnSale] = useState(() => {
+    if (product.sale_price) {
+      return [
+        {
+          persian: product.date_on_sale_from,
+          gregorian: product.date_on_sale_from_gregorian,
+        },
+        {
+          persian: product.date_on_sale_to,
+          gregorian: product.date_on_sale_to_gregorian,
+        },
+      ];
+    }
+
+    return [
+      {
+        persian: "",
+        gregorian: "",
+      },
+      {
+        persian: "",
+        gregorian: "",
+      },
+    ];
+  });
+  const [image, setImage] = useState(null);
+  const primaryImageRef = useRef();
+  const [state, formAction] = useActionState(editProduct, {
+    status: null,
+    message: null,
+  });
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!state.message) return;
+    toast(state.message, { type: `${state.status}` });
+    if (state.status === "success") {
+      router.push("/products");
+    }
+  }, [state]);
+  function setPrimaryImage(e) {
+    const file = e.target.files[0];
+    const render = new FileReader();
+    render.readAsDataURL(file);
+    render.onloadend = () => {
+      setImage(render.result?.toString());
+    };
+  }
+  function changeDateOnSale(value) {
+    if (value.length == 2) {
+      setDateOnSale([
+        {
+          persian: value[0],
+          gregorian: value[0]
+            .convert(gregorian, gregorian_en)
+            .format("YYYY-MM-DD HH:mm:ss"),
+        },
+        {
+          persian: value[1],
+          gregorian: value[1]
+            .convert(gregorian, gregorian_en)
+            .format("YYYY-MM-DD HH:mm:ss"),
+        },
+        value[1].convert(gregorian, gregorian_en).format("YYYY-MM-DD HH:mm:ss"),
+      ]);
+    }
+  }
+  return (
+    <>
+      <form className="row gy-4" action={formAction}>
+        <div className="col-md-12 mb-5">
+          <div className="row justify-content-center">
+            <div className="col-md-4">
+              <label className="form-label" htmlFor="">
+                تصویر اصلی
+              </label>
+
+              <div className={image ? "position-relative" : "d-none"}>
+                <img
+                  className="rounded"
+                  src={image}
+                  width={350}
+                  height={220}
+                  alt="product-image"
+                />
+                <div
+                  className="position-absolute"
+                  onClick={() => {
+                    primaryImageRef.current.value = "";
+                    setImage(null);
+                  }}
+                  style={{ top: "5px", right: "15px" }}
+                >
+                  <i className="bi bi-x text-danger fs-2 cursor-pointer"></i>
+                </div>
+              </div>
+              <div className={image === null ? "" : "d-none"}>
+                <Image
+                  unoptimized
+                  className="rounded mb-4"
+                  src={product.primary_image}
+                  width={350}
+                  height={220}
+                  alt="prouct-image"
+                />
+                <input
+                  onChange={setPrimaryImage}
+                  ref={primaryImageRef}
+                  name="primary_image"
+                  type="file"
+                  className="form-control"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-md-3">
+          <label className="form-label">تصاویر</label>
+          <input
+            multiple
+            name="images[]"
+            type="file"
+            className="form-control"
+          />
+        </div>
+        <div className="col-md-3">
+          <label className="form-label">نام</label>
+          <input
+            defaultValue={product.name}
+            name="name"
+            type="text"
+            className="form-control"
+          />
+        </div>
+        <div className="col-md-3">
+          <label className="form-label">دسته بندی</label>
+          <select
+            name="category_id"
+            defaultValue={product.category_id}
+            className="form-select"
+          >
+            {categories.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="col-md-3">
+          <label className="form-label">وضعیت</label>
+          <select
+            name="status"
+            defaultValue={product.status_value}
+            className="form-select"
+          >
+            <option value="1">فعال</option>
+            <option value="0">غیر فعال</option>
+          </select>
+        </div>
+        <div className="col-md-3">
+          <label className="form-label">قیمت</label>
+          <input
+            defaultValue={product.price}
+            name="price"
+            type="text"
+            className="form-control"
+          />
+        </div>
+        <div className="col-md-3">
+          <label className="form-label">تعداد</label>
+          <input
+            defaultValue={product.quantity}
+            name="quantity"
+            type="text"
+            className="form-control"
+          />
+        </div>
+        <div className="col-md-3">
+          <label className="form-label">قیمت حراجی</label>
+          <input
+            name="sale_price"
+            type="text"
+            defaultValue={product.sale_price}
+            className="form-control"
+          />
+        </div>
+        <div className="col-md-3">
+          <label className="form-label">تاریخ شروع و پایان حراجی</label>
+          <DatePicker
+            range
+            value={dateOnSale.map((time) => time.persian)}
+            format="YYYY-MM-DD HH:mm:ss"
+            inputClass="form-control"
+            calendar={persian}
+            locale={persian_fa}
+            onChange={changeDateOnSale}
+            plugins={[
+              <TimePicker key="time" position="bottom" />,
+              <DatePanel key="panel" markFocused />,
+            ]}
+          />
+          <input
+            name="date_on_sale_from"
+            value={dateOnSale[0]?.gregorian || ""}
+            type="hidden"
+          />
+          <input
+            name="date_on_sale_to"
+            value={dateOnSale[1]?.gregorian || ""}
+            type="hidden"
+          />
+        </div>
+        <div className="col-md-12">
+          <label className="form-label">توضیحات</label>
+          <textarea
+            defaultValue={product.description}
+            rows={5}
+            name="description"
+            className="form-control"
+          ></textarea>
+        </div>
+        <input name="id" type="hidden" defaultValue={product.id} />
+        <input name="_method" defaultValue="PUT" type="hidden" />
+        <div>
+          <SubmitButton
+            title="ویرایش محصول"
+            style="btn btn-outline-dark mt-3 mb-3"
+          />
+        </div>
+      </form>
+    </>
+  );
+}

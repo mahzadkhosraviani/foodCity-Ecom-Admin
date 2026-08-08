@@ -1,7 +1,8 @@
-import NextBprogress from "@/components/libraries/NextNprogress";
 import "./globals.css";
-import BootstrapClient from "@/components/libraries/Bootstrap";
+
 import Toastify from "@/components/libraries/Toastify";
+
+import { Suspense } from "react";
 
 export default function RootLayout({
   children,
@@ -11,11 +12,11 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl">
       <body>
-        <NextBprogress>
+        <Suspense>
+          {" "}
           {children}
-          <BootstrapClient />
           <Toastify />
-        </NextBprogress>
+        </Suspense>
       </body>
     </html>
   );
