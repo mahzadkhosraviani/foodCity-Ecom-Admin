@@ -40,46 +40,36 @@ async function createCategory(state, formData) {
 async function editCategory(state, formData) {
   const id = formData.get("id");
   const name = formData.get("name");
-  const email = formData.get("email");
-  const cellphone = formData.get("cellphone");
-  const password = formData.get("password");
+  const description = formData.get("description");
+
   if (id === "" || id === null) {
     return {
       status: "error",
-      message: "شناسه کاربر الزامی است.",
+      message: "شناسه دسته بندی الزامی است.",
     };
   }
   if (name === "") {
     return {
       status: "error",
-      message: "فیلد نام الزامی است.",
+      message: "فیلد نام دسته بندی الزامی است.",
     };
   }
-  if (email === "") {
+  if (description === "") {
     return {
       status: "error",
-      message: "فیلد ایمیل الزامی است.",
-    };
-  }
-  const cellphonePattern = /^(\+98|0)?9\d{9}$/i;
-  if (cellphone == "" || !cellphonePattern.test(cellphone)) {
-    return {
-      status: "error",
-      message: "فیلد شماره تماس کاربر نامعتبر است.",
+      message: "فیلد توضیحات الزامی است.",
     };
   }
 
-  const data = await PutFetch(`/users/${id}`, {
+  const data = await PutFetch(`/categories/${id}`, {
     name,
-    email,
-    cellphone,
-    password,
+    description,
   });
   if (data.status === "success") {
-    revalidatePath("/users");
+    revalidatePath("/categories");
     return {
       status: data.status,
-      message: "کاربر مورد نظر ایجاد شد.",
+      message: "دسته بندی مورد نظر ویرایش شد.",
       user: data.data.user,
     };
   } else {
